@@ -5,8 +5,9 @@ import NavBar from './NavBar';
 import ErrorMessage from './ErrorMessage';
 import Welcome from './Welcome';
 import 'bootstrap/dist/css/bootstrap.css';
+import withAuthProvider, { AuthComponentProps } from './AuthProvider';
 
-class App extends Component<any> {
+class App extends Component<AuthComponentProps> {
   render() {
     let error = null;
     if (this.props.error) {
@@ -38,4 +39,4 @@ class App extends Component<any> {
   }
 }
 
-export default App;
+export default withAuthProvider(App);
