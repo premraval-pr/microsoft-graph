@@ -73,3 +73,14 @@ export async function getUserWeekCalendar(accessToken: string, timeZone: string,
     return response.value;
   }
 }
+
+export async function createEvent(accessToken: string, newEvent: Event): Promise<Event> {
+  const client = getAuthenticatedClient(accessToken);
+
+  // POST /me/events
+  // JSON representation of the new event is sent in the
+  // request body
+  return await client
+    .api('/me/events')
+    .post(newEvent);
+}

@@ -7,6 +7,7 @@ import Welcome from './Welcome';
 import 'bootstrap/dist/css/bootstrap.css';
 import withAuthProvider, { AuthComponentProps } from './AuthProvider';
 import Calendar from './Calendar';
+import NewEvent from './NewEvent';
 
 class App extends Component<AuthComponentProps> {
   render() {
@@ -36,8 +37,14 @@ class App extends Component<AuthComponentProps> {
               <Route exact path="/calendar"
               render={(props) =>
                 this.props.isAuthenticated ?
-                <Calendar {...props} /> :
-                <Redirect to="/" />
+                  <Calendar {...props} /> :
+                  <Redirect to="/" />
+              } />
+              <Route exact path="/newevent"
+              render={(props) =>
+                this.props.isAuthenticated ?
+                  <NewEvent {...props} /> :
+                  <Redirect to="/" />
               } />
           </Container>
         </div>
