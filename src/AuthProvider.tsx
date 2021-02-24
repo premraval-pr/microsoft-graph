@@ -1,6 +1,6 @@
 import React from 'react';
 import { PublicClientApplication } from '@azure/msal-browser';
-
+import { getUserDetails } from './GraphService';
 import { config } from './Config';
 
 export interface AuthComponentProps {
@@ -131,11 +131,18 @@ export default function withAuthProvider<T extends React.Component<AuthComponent
         var accessToken = await this.getAccessToken(config.scopes);
 
         if (accessToken) {
-          // TEMPORARY: Display the token in the error flash
-          this.setState({
-            isAuthenticated: true,
-            error: { message: "Access token:", debug: accessToken }
-          });
+          // Get the user's profile from Graph
+            var user = await getUserDetails(accessToken);
+            this.setState({
+                isAuthenticated: true,
+                user: {
+                    displayName: user.displayName,
+                    email: user.mail || user.userPrincipalName,
+                    timeZone: user.mailboxSettings.timeZone || 'UTC',
+                    timeFormat: user.mailboxSettings.timeFormat
+                 },
+                error: null
+            });
         }
       }
       catch(err) {
