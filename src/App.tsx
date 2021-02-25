@@ -8,9 +8,19 @@ import 'bootstrap/dist/css/bootstrap.css';
 import withAuthProvider, { AuthComponentProps } from './AuthProvider';
 import Calendar from './Calendar';
 import NewEvent from './NewEvent';
+import { config } from "./Config";
+import { getListMessage } from './GraphService';
 
 class App extends Component<AuthComponentProps> {
+
+  async componentDidMount(){
+    let accessToken = await this.props.getAccessToken(config.scopes);
+    let messages = await getListMessage(accessToken);
+    console.log(messages);
+  }
+
   render() {
+
     let error = null;
     if (this.props.error) {
       error = <ErrorMessage

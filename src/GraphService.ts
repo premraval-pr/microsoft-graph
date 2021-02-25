@@ -1,5 +1,5 @@
 import moment, { Moment } from 'moment';
-import { Event } from 'microsoft-graph';
+import { Event, Message } from 'microsoft-graph';
 import { GraphRequestOptions, PageCollection, PageIterator } from '@microsoft/microsoft-graph-client';
 
 var graph = require('@microsoft/microsoft-graph-client');
@@ -83,4 +83,32 @@ export async function createEvent(accessToken: string, newEvent: Event): Promise
   return await client
     .api('/me/events')
     .post(newEvent);
+}
+
+export async function getListMessage(accessToken: string): Promise<Message[]>{
+  const client = getAuthenticatedClient(accessToken);
+
+  let response = await client.api('/me/messages')
+	.select('sender,subject')
+	.get();
+
+  if (response["@odata.nextLink"]) {
+    // Presence of the nextLink property indicates more results are available
+    // Use a page iterator to get all results
+    let messages: Message[] = [];
+
+    // Must include the time zone header in page
+    // requests too
+
+    var pageIterator = new PageIterator(client, response, (message) => {
+      messages.push(message);
+      return true;
+    });
+
+    await pageIterator.iterate();
+
+    return messages;
+  } else {
+    return response.value;
+  }  
 }
