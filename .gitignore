@@ -11,9 +11,6 @@
 # production
 /build
 
-# Ids and Privacy
-/src/Config.ts
-
 # misc
 .DS_Store
 .env.local
